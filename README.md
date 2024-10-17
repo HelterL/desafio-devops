@@ -1,19 +1,5 @@
 # Desafio Devops
 
-O projeto contém uma aplicação básica com Node, Ngnix e MySQL. 
-
-A cada atualização da página, um novo registro será cadastrado no banco de dados e será mostrado na listagem, na mesma página.  
-
-O projeto contém algumas falhas e erros, analise e implemente as devidas correções.
-
-Se não entender algum conceito ou parte do problema, não é motivo para se preocupar! Queremos que faça o desafio até onde souber.
-
-### O que deve ser feito? ### 
-
- - ajustes que fazem todas as aplicações subirem e se comunicarem
- - clusterize esta aplicação para o Kubernetes, utilize o cluster de sua preferência mas não esqueça de fornecer o(s) manifesto(s) que criar 
- - um README contendo os seus pensamentos ao longo do projeto para identificação e correção dos erros
-
-Faça um fork e realize commits ao longo do processo para que possamos entender o seu modo de pensar! :)
- 
-  
+- Atualização no Dockerfile do nginx, adicionando para onde o arquivo deve ser armazenado e atualizando nginx.conf adicionando conteúdo dentro do bloco http.
+- Atualização no Dockerfile do node na seção COPY adicionando aonde o arquivo deve ser copiado, arquivos de dependencias, instalar dependencias e comando para iniciar a aplicação.
+- Atualização no docker-compose para adição da seção networks e adição do driver bridge para comunicação entre os containers
