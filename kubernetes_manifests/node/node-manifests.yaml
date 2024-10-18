@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: desafio-app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: desafio-app-secret
+  namespace: desafio-app
+type: Opaque
+data:
+  DATABASE: bm9kZV9kYg==
+  PASSWORD: cm9vdA==
+  HOST: bXlzcWwubXlzcWwtYXBwLnN2Yy5jbHVzdGVyLmxvY2Fs
+  USER: cm9vdA==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: desafio-app
+  namespace: desafio-app
+  labels:
+    app: desafio-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: desafio-app
+  template:
+    metadata:
+      labels:
+        app: desafio-app
+    spec:
+      containers:
+        - name: app
+          image: helterpitanga/desafio-app-a4pm:latest
+          env:
+          - name: DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: desafio-app-secret
+                key: DATABASE
+          - name: PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: desafio-app-secret
+                key: PASSWORD
+          - name: HOST
+            valueFrom:
+              secretKeyRef:
+                name: desafio-app-secret
+                key: HOST
+          - name: USER
+            valueFrom:
+              secretKeyRef:
+                name: desafio-app-secret
+                key: USER
+          command: ["dockerize", "-wait", "tcp://mysql.mysql-app.svc.cluster.local:3306", "-timeout", "60s", "node", "index.js"]
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: desafio-app-service
+  namespace: desafio-app
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: desafio-app
+  type: ClusterIP
